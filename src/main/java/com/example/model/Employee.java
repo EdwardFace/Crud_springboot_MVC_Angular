@@ -17,11 +17,11 @@ public class Employee implements Serializable{
     private Long id;
     private String name;
     private String email;
-    private String jobTitle;
+    private String job_title;
     private String phone;
-    private String imageUrl;
+    private String image_url;
     @Column(nullable = false,updatable = false)
-    private String employeeCode;
+    private String employee_code;
     
     public Employee() {
     }
@@ -29,19 +29,10 @@ public class Employee implements Serializable{
     public Employee(String name, String email, String jobTitle, String phone, String ImageUrl, String employeeCode) {
         this.name = name;
         this.email = email;
-        this.jobTitle = jobTitle;
+        this.job_title = jobTitle;
         this.phone = phone;
-        this.imageUrl = ImageUrl;
-        this.employeeCode = employeeCode;
-    }
-    
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        this.image_url = ImageUrl;
+        this.employee_code = employeeCode;
     }
 
     public Long getId() {
@@ -52,6 +43,14 @@ public class Employee implements Serializable{
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -60,12 +59,12 @@ public class Employee implements Serializable{
         this.email = email;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
+    public String getJob_title() {
+        return job_title;
     }
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+    public void setJob_title(String job_title) {
+        this.job_title = job_title;
     }
 
     public String getPhone() {
@@ -76,20 +75,24 @@ public class Employee implements Serializable{
         this.phone = phone;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage_url() {
+        return image_url;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
-    public String getEmployeeCode() {
-        return employeeCode;
+    public String getEmployee_code() {
+        return employee_code;
     }
 
-    public void setEmployeeCode(String employeeCode) {
-        this.employeeCode = employeeCode;
+    public void setEmployee_code(String employee_code) {
+        this.employee_code = employee_code;
     }
+    
+
+    
+    
     
 }

@@ -1,5 +1,6 @@
 package com.example.services.interfaces;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ public interface EmployeeServiceInterface {
     public boolean updateEmployee(Employee e);
 
     public void deleteEmployee(Long id);
+
+    public Optional<Employee> findEmployeeByEmail(String email);
 
     public Optional<Employee> findEmployeeById(Long id);
 }

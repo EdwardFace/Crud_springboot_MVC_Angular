@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.model.Employee;
 import com.example.services.EmployeeService;
 
+import lombok.extern.java.Log;
+
 @RestController
-@RequestMapping("/empleados")
+@RequestMapping(value = "/empleados")
 public class EmployeeController {
     
     @Autowired
@@ -27,11 +30,12 @@ public class EmployeeController {
     @GetMapping("/lista")
     public ResponseEntity<List<Employee>> getAllEmployee(){
         List<Employee> employees = employeeService.findAllEmployees();
-        if(!employees.isEmpty()){
+        return new ResponseEntity<>(employees,HttpStatus.OK);
+        /*if(!employees.isEmpty()){
             return new ResponseEntity<>(employees,HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        }*/
     }
 
     @GetMapping("/find/{id}")
@@ -46,18 +50,24 @@ public class EmployeeController {
 
     @PostMapping("/add")
     public ResponseEntity<Employee> addEmployee(@RequestBody Employee e){
-        Employee employee =  employeeService.findEmployeeById(e.getId()).get();
-        if(employee == null){
-            boolean add = employeeService.addEmployee(employee);
-            if(add){
-                return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
-            }else{
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+        try{
+            Optional<Employee> employee =  employeeService.findEmployeeByEmail(e.getEmail());
             
-
+            if(!employee.isPresent()){
+                e.setEmployee_code(employeeService.setCodeEmployee());
+                boolean add = employeeService.addEmployee(e);
+                if(add){
+                    return new ResponseEntity<Employee>(e, HttpStatus.CREATED);
+                }else{
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch(Exception ex){
+            
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);   
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+       
     }
     @PutMapping("/update")
     public ResponseEntity<Employee> updateEmployee(@RequestBody Employee e){
@@ -68,9 +78,7 @@ public class EmployeeController {
                 return new ResponseEntity<Employee>(employee, HttpStatus.OK);
             }else{
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            
-
+            }            
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

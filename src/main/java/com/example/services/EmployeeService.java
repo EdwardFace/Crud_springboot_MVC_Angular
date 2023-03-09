@@ -1,7 +1,5 @@
 package com.example.services;
 
-import java.lang.StackWalker.Option;
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.exceptions.UserNotFoundException;
 import com.example.model.Employee;
@@ -16,13 +15,13 @@ import com.example.repository.EmployeeRepository;
 import com.example.services.interfaces.EmployeeServiceInterface;
 
 @Service
+@Transactional
 public class EmployeeService implements EmployeeServiceInterface{
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @Override
     public boolean addEmployee(Employee e) {
-        e.setEmployeeCode(UUID.randomUUID().toString());
         try{
             employeeRepository.saveAndFlush(e);
             return true;
@@ -58,14 +57,26 @@ public class EmployeeService implements EmployeeServiceInterface{
     }
 
     @Override
+    public Optional<Employee> findEmployeeByEmail(String email) {
+        try{
+            return employeeRepository.findEmployeeByEmail(email);
+        }catch(UserNotFoundException ex){
+            return Optional.empty();
+        } 
+    }
+
+    @Override
     public Optional<Employee> findEmployeeById(Long id) {
         try{
-            return employeeRepository.findEmployeeById(id);
+            return employeeRepository.findById(id);
         }catch(UserNotFoundException ex){
             return Optional.empty();
         }
         
-        
+    }
+
+    public String setCodeEmployee(){
+        return UUID.randomUUID().toString();
     }
     
 
